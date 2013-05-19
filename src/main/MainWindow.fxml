@@ -11,7 +11,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml" fx:controller="jp.rainbowdevil.iris.IrisController">
   <children>
-    <SplitPane dividerPositions="0.19333333333333333" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane id="page-splitpane" dividerPositions="0.19333333333333333" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
@@ -33,13 +33,13 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
-            <SplitPane dividerPositions="0.41632088520055327" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane id="page-splitpane" dividerPositions="0.41632088520055327" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="&#10;">
                   <children>
                     <ToolBar id="page-tree-toolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <items>
-                        <Label fx:id="messageThreadTitleLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" text="Label" />
+                        <Label fx:id="messageThreadTitleLabel" layoutX="0.0" layoutY="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" text="Label" />
                       </items>
                     </ToolBar>
                     <ListView fx:id="messageThreadListView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
