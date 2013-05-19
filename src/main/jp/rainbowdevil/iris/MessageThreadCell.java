@@ -1,14 +1,13 @@
 package jp.rainbowdevil.iris;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 
 public class MessageThreadCell extends ListCell<MessageThread>{
@@ -18,21 +17,13 @@ public class MessageThreadCell extends ListCell<MessageThread>{
     public Label label = new Label("(empty)");
     public Label label2 = new Label("(empty)");
     public Pane pane = new Pane();
-    public Button button = new Button("(>)");
     public MessageThread lastItem;
     
     public MessageThreadCell(){
     	super();
     	vBox.getChildren().addAll(hbox1,hbox2);
-    	hbox1.getChildren().addAll(label, pane, button);
+    	hbox1.getChildren().addAll(label, pane);
         HBox.setHgrow(pane, Priority.ALWAYS);
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println(lastItem + " : " + event);
-            }
-        });
-        
         hbox2.getChildren().add(label2);
     }
     
@@ -47,6 +38,8 @@ public class MessageThreadCell extends ListCell<MessageThread>{
             lastItem = item;
             label.setText(item!=null ? item.getTitle() : "<null>");
             label2.setText("スレ数:"+item.getSize()+" スレ立て:"+item.getCreatedDate().toString());
+            label2.setTextFill(Color.web("#999999"));
+            label2.setFont(new Font("ヒラギノ角ゴ Pro W3", 12));
             setGraphic(vBox);
         }
     }
