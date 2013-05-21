@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,10 +14,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
@@ -25,6 +30,11 @@ public class IrisController implements Initializable{
 	private static org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(IrisController.class);
 	private BbsService service;
 	private TreeItem<Board> rootNode = new TreeItem<Board>(new Board());
+	
+	private Stage stage;
+	
+	@FXML
+	private AnchorPane topPane;
 	
 	@FXML
 	private Button boardListReloadButton;
@@ -40,6 +50,15 @@ public class IrisController implements Initializable{
 	private WebView messageView;
 	
 	@FXML
+	private ToolBar boardListToolbar;
+	
+	@FXML
+	private ToolBar threadListToolbar;
+	
+	@FXML
+	private ToolBar messageListToolbar;
+	
+	@FXML
 	private Label messageThreadTitleLabel;
 	
 	@Override
@@ -49,13 +68,16 @@ public class IrisController implements Initializable{
 		service.setController(this);
 		service.init();
 		
+		
 		service.updateBoardList();
-		//boardTreeView.getSelectionModel().
 		boardTreeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		boardTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue,
 					Object newValue) {
+				if (boardTreeView.getSelectionModel().getSelectedItem() == null){
+					return;
+				}
 				Board board = (Board)boardTreeView.getSelectionModel().getSelectedItem().getValue();
 				if (board.getUrl() == null){
 					return;
@@ -83,6 +105,29 @@ public class IrisController implements Initializable{
 			}
 		});
 		webEngine = messageView.getEngine();
+		setupToolbar(boardListToolbar);
+		setupToolbar(messageListToolbar);
+		setupToolbar(threadListToolbar);
+		
+	}
+	
+	private double mouseDragOffsetX = 0;
+	private double mouseDragOffsetY = 0;
+	
+	private void setupToolbar(ToolBar toolBar){
+        toolBar.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                mouseDragOffsetX = event.getSceneX();
+                mouseDragOffsetY = event.getSceneY();
+            }
+        });
+        toolBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+            	Stage stage = (Stage) topPane.getScene().getWindow();
+                stage.setX(event.getScreenX()-mouseDragOffsetX);
+                stage.setY(event.getScreenY()-mouseDragOffsetY);
+            }
+        });
 	}
 	
 	public void showMessageWebView(String content){
