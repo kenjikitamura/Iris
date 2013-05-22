@@ -4,11 +4,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -21,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jp.rainbowdevil.bbslibrary.model.Board;
@@ -31,7 +35,11 @@ public class IrisController implements Initializable{
 	private BbsService service;
 	private TreeItem<Board> rootNode = new TreeItem<Board>(new Board());
 	
-	private Stage stage;
+	/** 最大化用 */
+    private Rectangle2D backupWindowBounds = null;
+    private boolean maximized = false;
+    
+    private Stage stage;
 	
 	@FXML
 	private AnchorPane topPane;
@@ -108,7 +116,6 @@ public class IrisController implements Initializable{
 		setupToolbar(boardListToolbar);
 		setupToolbar(messageListToolbar);
 		setupToolbar(threadListToolbar);
-		
 	}
 	
 	private double mouseDragOffsetX = 0;
@@ -160,6 +167,53 @@ public class IrisController implements Initializable{
 		messageThreadListView.getItems().addAll(messageThreads);
 	}
 	
+	/**
+	 * 終了ボタン押下
+	 * @param e
+	 */
+	public void exit(ActionEvent e) {
+		Platform.exit();
+	}
+	
+	/**
+	 * 最小化ボタン押下
+	 * @param e
+	 */
+	public void minimized(ActionEvent e){		
+		stage.setIconified(true);
+	}
+	
+	/**
+	 * 最大化ボタン押下
+	 * @param e
+	 */
+	public void maxmized(ActionEvent e){
+		toogleMaximized();
+	}
+	
+	/**
+	 * 最大化、最大化解除を行う
+	 */
+    public void toogleMaximized() {        
+        final Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), 1, 1).get(0);
+        if (maximized) {
+            maximized = false;
+            if (backupWindowBounds != null) {
+                stage.setX(backupWindowBounds.getMinX());
+                stage.setY(backupWindowBounds.getMinY());
+                stage.setWidth(backupWindowBounds.getWidth());
+                stage.setHeight(backupWindowBounds.getHeight());
+            }
+        } else {
+            maximized = true;
+            backupWindowBounds = new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+            stage.setX(screen.getVisualBounds().getMinX());
+            stage.setY(screen.getVisualBounds().getMinY());
+            stage.setWidth(screen.getVisualBounds().getWidth());
+            stage.setHeight(screen.getVisualBounds().getHeight());
+        }
+    }
+	
 	private void setupTreeItem(TreeItem<Board> parentTreeItem, Board board){
 		TreeItem<Board> treeItem = new TreeItem<Board>(board);
 		parentTreeItem.getChildren().add(treeItem);
@@ -168,5 +222,13 @@ public class IrisController implements Initializable{
 				setupTreeItem(treeItem, childBoard);
 			}
 		}
+	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 }

@@ -23,9 +23,9 @@
               <top>
                 <ToolBar id="page-toolbar" fx:id="boardListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="175.0">
                   <items>
-                    <Button mnemonicParsing="false" onAction="#exit" text="X" />
-                    <Button mnemonicParsing="false" onAction="#minimized" text="-" />
-                    <Button mnemonicParsing="false" onAction="#maxmized" text="+" />
+                    <Button mnemonicParsing="false" onAction="exit" text="X" />
+                    <Button mnemonicParsing="false" onAction="minimized" text="-" />
+                    <Button mnemonicParsing="false" onAction="maxmized" text="+" />
                   </items>
                 </ToolBar>
               </top>
