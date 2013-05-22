@@ -1,3 +1,8 @@
+#root {
+    -fx-background-color: #333333;
+    -fx-padding: 1px;
+}
+
 /* ツールバー */
 #page-tree-toolbar {
     -fx-padding: 3 4 4 4;
@@ -139,3 +144,9 @@
     -fx-shape: "";
 }
 
+/* ウインドウサイズ変更ボタン */
+#window-resize-button {
+    -fx-background-image: url("images/window-corner.png");
+    -fx-background-position: right 1px bottom 1px;
+    -fx-background-repeat: no-repeat;
+}
