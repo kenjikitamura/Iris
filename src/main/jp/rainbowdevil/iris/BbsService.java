@@ -1,8 +1,10 @@
 package jp.rainbowdevil.iris;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.BbsConnector;
@@ -12,6 +14,9 @@ import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
+import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
+import jp.rainbowdevil.bbslibrary.repository.BbsRepository;
+import jp.rainbowdevil.bbslibrary.utils.IOUtils;
 
 public class BbsService {
 	private static org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
@@ -21,16 +26,34 @@ public class BbsService {
 	private BbsManager bbsManager;
 	private BbsConnector bbsConnector;
 	private IrisController controller;
+	private BbsRepository bbsRepository;
 	
 	public void init(){
 		bbsManager = new BbsManager();
 		bbs = new Bbs();
+		bbs.setId("2ch_");
 		bbs.setUrl("http://menu.2ch.net/bbsmenu.html");
 		bbsConnector = bbsManager.createBbsConnector(bbs);
+		bbsRepository = new BbsRepository();
 	}
 	
-	public void downloadBoardList() throws IOException, BbsPerseException{
-		boardGroups = bbsConnector.getBoardGroup();		
+	/**
+	 * 掲示板の板一覧をダウンロードする。
+	 * 同時にレポジトリに保存する。
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws BbsPerseException
+	 */
+	public List<Board> downloadBoardList() throws IOException, BbsPerseException{
+		InputStream inputStream = bbsConnector.getBoardGroup();
+		byte[] bytes = IOUtils.toByteArray(inputStream);		
+		NichannelParser parser = new NichannelParser();
+		List<Board> boardGroups = parser.parseBbsMenu(new ByteArrayInputStream(bytes));
+		
+		// パースに成功したら保存
+		bbsRepository.writeBoardList(bbs, bytes);
+		return boardGroups;
 	}
 	
 	public BbsConnector createBbsConnector(Bbs bbs){
@@ -42,14 +65,37 @@ public class BbsService {
 	 * 板一覧を更新し、表示する。
 	 */
 	public void updateBoardList(){
-		try {
-			downloadBoardList();
-			controller.showBoardList(boardGroups);
-		} catch (IOException e) {
-			controller.showErrorMessage("板一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
-		} catch (BbsPerseException e) {
-			controller.showErrorMessage("板一覧のパースに失敗。"+e.getClass().getName()+":"+e.getMessage());
+		List<Board> localBoardList = readBoardListFromRepository();
+		if (localBoardList != null){
+			log.debug("板一覧のキャッシュを使用");
+			boardGroups = localBoardList;
+			controller.showBoardList(localBoardList);
+		}else{
+			log.debug("サーバから板一覧を取得");
+			try {
+				List<Board> serverBoardList = downloadBoardList();
+				boardGroups = serverBoardList;
+				controller.showBoardList(serverBoardList);	
+			} catch (IOException e) {
+				controller.showErrorMessage("板一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
+			} catch (BbsPerseException e) {
+				controller.showErrorMessage("板一覧のパースに失敗。"+e.getClass().getName()+":"+e.getMessage());
+			}
 		}
+	}
+	
+	public List<Board> readBoardListFromRepository(){
+		try {
+			InputStream inputStream = bbsRepository.loadBoardList(bbs);
+			NichannelParser parser = new NichannelParser();
+			boardGroups = parser.parseBbsMenu(inputStream);
+			return boardGroups;
+		} catch (IOException e){
+			log.debug("保存した板一覧はなかった。");
+		} catch (BbsPerseException e) {
+			log.debug("保存した板一覧のパースに失敗",e);
+		}
+		return null;
 	}
 	
 	public void openBoard(Board board){
