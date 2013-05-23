@@ -66,7 +66,7 @@ public class IrisController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		log.debug("Initialize stage="+stage);
+		log.debug("Controller.initialize");
 		service = new BbsService();
 		service.setController(this);
 		service.init();
@@ -247,7 +247,7 @@ public class IrisController implements Initializable{
 	 * ウインドウの状態を保存する。
 	 */
 	public void saveWindowState(){
-		log.debug("ウインドウ高さ="+stage.getHeight()+" 幅="+stage.getWidth()+" 板幅="+leftSplitPane.getDividerPositions()[0]+" メッセージ幅="+rightSplitPane.getDividerPositions()[0]);
+		//log.debug("ウインドウ高さ="+stage.getHeight()+" 幅="+stage.getWidth()+" 板幅="+leftSplitPane.getDividerPositions()[0]+" メッセージ幅="+rightSplitPane.getDividerPositions()[0]);
 		IrisPreferences preferences = new IrisPreferences();
 		preferences.setValue(IrisPreferences.WINDOW_HEIGHT, stage.getHeight());
 		preferences.setValue(IrisPreferences.WINDOW_WIDTH, stage.getWidth());
@@ -273,11 +273,12 @@ public class IrisController implements Initializable{
 		double[] div2 = new double[1];
 		div2[0] = preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION2, 0.5f); 
 		rightSplitPane.setDividerPositions(div2);
-		
+		/*
 		log.debug("ウインドウサイズ復元 width="+preferences.getDouble(IrisPreferences.WINDOW_WIDTH, 600f)+
 				" height="+preferences.getDouble(IrisPreferences.WINDOW_HEIGHT, 900f)+
 				" split1="+preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION1, 0.3f)+
 				" split2="+preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION2, 0.5f));
+		*/
 	}
 
 	public Stage getStage() {
