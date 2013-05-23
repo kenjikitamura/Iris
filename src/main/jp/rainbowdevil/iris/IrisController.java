@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeItem;
@@ -69,6 +70,9 @@ public class IrisController implements Initializable{
 	@FXML
 	private Label messageThreadTitleLabel;
 	
+	@FXML
+	private MenuBar menuBar;
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		log.debug("Initialize");
@@ -116,6 +120,8 @@ public class IrisController implements Initializable{
 		setupToolbar(boardListToolbar);
 		setupToolbar(messageListToolbar);
 		setupToolbar(threadListToolbar);
+		
+		menuBar.setUseSystemMenuBar(false);
 	}
 	
 	private double mouseDragOffsetX = 0;

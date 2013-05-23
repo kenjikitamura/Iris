@@ -35,6 +35,12 @@ public class BbsService {
 		bbs.setUrl("http://menu.2ch.net/bbsmenu.html");
 		bbsConnector = bbsManager.createBbsConnector(bbs);
 		bbsRepository = new BbsRepository();
+		
+		setProxy();
+	}
+	
+	private void setProxy(){
+			
 	}
 	
 	/**

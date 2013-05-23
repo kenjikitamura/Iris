@@ -12,116 +12,122 @@
 
 <AnchorPane id="root" fx:id="topPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml" fx:controller="jp.rainbowdevil.iris.IrisController">
   <children>
-    <SplitPane id="page-splitpane" dividerPositions="0.19320712694877507" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-          <children>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <center>
-                <TreeView id="page-tree" fx:id="boardTreeView" prefHeight="-1.0" prefWidth="-1.0" />
-              </center>
-              <top>
-                <ToolBar id="page-toolbar" fx:id="boardListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="175.0">
+    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <center>
+        <SplitPane id="page-splitpane" dividerPositions="0.5016703786191536" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px">
+          <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+              <children>
+                <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <center>
+                    <TreeView id="page-tree" fx:id="boardTreeView" prefHeight="-1.0" prefWidth="-1.0" />
+                  </center>
+                  <top>
+                    <ToolBar id="page-toolbar" fx:id="boardListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="175.0">
+                      <items>
+                        <Button mnemonicParsing="false" onAction="#exit" text="X" />
+                        <Button mnemonicParsing="false" onAction="#minimized" text="-" />
+                        <Button mnemonicParsing="false" onAction="#maxmized" text="+" />
+                      </items>
+                    </ToolBar>
+                  </top>
+                </BorderPane>
+              </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+              <children>
+                <SplitPane id="page-splitpane" dividerPositions="0.558165548098434" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <items>
-                    <Button mnemonicParsing="false" onAction="#exit" text="X" />
-                    <Button mnemonicParsing="false" onAction="#minimized" text="-" />
-                    <Button mnemonicParsing="false" onAction="#maxmized" text="+" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="&#10;">
+                      <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <center>
+                            <ListView fx:id="messageThreadListView" prefHeight="571.0" prefWidth="303.0" />
+                          </center>
+                          <top>
+                            <ToolBar id="page-toolbar" fx:id="threadListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="303.0">
+                              <items>
+                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
+                                  <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                        <Image url="@jp/rainbowdevil/iris/images/reload.png" />
+                                      </image>
+                                    </ImageView>
+                                  </graphic>
+                                </Button>
+                              </items>
+                            </ToolBar>
+                          </top>
+                        </BorderPane>
+                      </children>
+                    </AnchorPane>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                      <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <center>
+                            <WebView fx:id="messageView" prefHeight="570.0" prefWidth="423.0" />
+                          </center>
+                          <top>
+                            <ToolBar id="page-toolbar" fx:id="messageListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="423.0">
+                              <items>
+                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
+                                  <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                        <Image url="@jp/rainbowdevil/iris/images/back.png" />
+                                      </image>
+                                    </ImageView>
+                                  </graphic>
+                                </Button>
+                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
+                                  <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                        <Image url="@jp/rainbowdevil/iris/images/forward.png" />
+                                      </image>
+                                    </ImageView>
+                                  </graphic>
+                                </Button>
+                                <Label fx:id="messageThreadTitleLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" />
+                              </items>
+                            </ToolBar>
+                          </top>
+                        </BorderPane>
+                      </children>
+                      <padding>
+                        <Insets right="-1.0" />
+                      </padding>
+                    </AnchorPane>
                   </items>
-                </ToolBar>
-              </top>
-            </BorderPane>
-          </children>
-        </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-          <children>
-            <SplitPane id="page-splitpane" dividerPositions="0.417817679558011" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                </SplitPane>
+              </children>
+            </AnchorPane>
+          </items>
+        </SplitPane>
+      </center>
+      <top>
+        <MenuBar fx:id="menuBar" prefWidth="229.0" useSystemMenuBar="true">
+          <menus>
+            <Menu mnemonicParsing="false" text="ファイル">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="&#10;">
-                  <children>
-                    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                      <center>
-                        <ListView fx:id="messageThreadListView" prefHeight="571.0" prefWidth="303.0" />
-                      </center>
-                      <top>
-                        <ToolBar id="page-toolbar" fx:id="threadListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="303.0">
-                          <items>
-                            <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
-                              <graphic>
-                                <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-                                  <image>
-                                    <Image url="@jp/rainbowdevil/iris/images/reload.png" />
-                                  </image>
-                                </ImageView>
-                              </graphic>
-                            </Button>
-                          </items>
-                        </ToolBar>
-                      </top>
-                    </BorderPane>
-                  </children>
-                </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                  <children>
-                    <MenuBar layoutX="190.0" layoutY="574.0" prefWidth="229.0" useSystemMenuBar="true">
-                      <menus>
-                        <Menu mnemonicParsing="false" text="ファイル">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="閉じる" />
-                          </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="編集">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="削除" />
-                          </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="ヘルプ">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="バージョン情報" />
-                          </items>
-                        </Menu>
-                      </menus>
-                    </MenuBar>
-                    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                      <center>
-                        <WebView fx:id="messageView" prefHeight="570.0" prefWidth="423.0" />
-                      </center>
-                      <top>
-                        <ToolBar id="page-toolbar" fx:id="messageListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="423.0">
-                          <items>
-                            <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
-                              <graphic>
-                                <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-                                  <image>
-                                    <Image url="@jp/rainbowdevil/iris/images/back.png" />
-                                  </image>
-                                </ImageView>
-                              </graphic>
-                            </Button>
-                            <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
-                              <graphic>
-                                <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-                                  <image>
-                                    <Image url="@jp/rainbowdevil/iris/images/forward.png" />
-                                  </image>
-                                </ImageView>
-                              </graphic>
-                            </Button>
-                            <Label fx:id="messageThreadTitleLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" />
-                          </items>
-                        </ToolBar>
-                      </top>
-                    </BorderPane>
-                  </children>
-                  <padding>
-                    <Insets right="-1.0" />
-                  </padding>
-                </AnchorPane>
+                <MenuItem mnemonicParsing="false" text="閉じる" />
               </items>
-            </SplitPane>
-          </children>
-        </AnchorPane>
-      </items>
-    </SplitPane>
+            </Menu>
+            <Menu mnemonicParsing="false" text="編集">
+              <items>
+                <MenuItem mnemonicParsing="false" text="削除" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="ヘルプ">
+              <items>
+                <MenuItem mnemonicParsing="false" text="バージョン情報" />
+              </items>
+            </Menu>
+          </menus>
+        </MenuBar>
+      </top>
+    </BorderPane>
   </children>
   <stylesheets>
     <URL value="@jp/rainbowdevil/iris/iris.css" />

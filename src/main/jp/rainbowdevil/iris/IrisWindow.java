@@ -23,8 +23,13 @@ public class IrisWindow extends Application{
         // ステージのタイトルを設定
         stage.setTitle("Iris");
         
-        // ウインドウタイトルを非表示
-        stage.initStyle(StageStyle.UNDECORATED);
+        String osName = System.getProperty("os.name");
+        if ( osName != null && osName.contains("Windows")){
+        	stage.initStyle(StageStyle.DECORATED);
+        }else{
+        	// ウインドウタイトルを非表示
+        	stage.initStyle(StageStyle.UNDECORATED);
+        }
         
         //Parent root = FXMLLoader.load(getClass().getResource("/MainWindow.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
