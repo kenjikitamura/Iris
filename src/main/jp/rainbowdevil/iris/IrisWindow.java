@@ -1,11 +1,16 @@
 package jp.rainbowdevil.iris;
 
+import java.util.prefs.BackingStoreException;
+
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
+import jp.rainbowdevil.iris.preferences.IrisPreferences;
 import jp.rainbowdevil.iris.ui.WindowResizeButton;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,8 +39,10 @@ public class IrisWindow extends Application{
         //Parent root = FXMLLoader.load(getClass().getResource("/MainWindow.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
         final AnchorPane root = (AnchorPane) loader.load();
-        IrisController controller = (IrisController)loader.getController();
+        final IrisController controller = (IrisController)loader.getController();
+        log.debug("stage="+stage);
         controller.setStage(stage);
+        controller.loadWindowState();
         
         final WindowResizeButton windowResizeButton = new WindowResizeButton(stage, 100,100);
 		windowResizeButton.setManaged(false);
@@ -61,11 +68,31 @@ public class IrisWindow extends Application{
         Scene scene = new Scene(root2);
         
         
-        // 
+        // スタイルシート設定
         scene.getStylesheets().add(IrisWindow.class.getResource("iris.css").toExternalForm());
         
         stage.setScene(scene);
         
+        IrisPreferences preferences = new IrisPreferences();
+        String proxyAddress = preferences.get(IrisPreferences.PROXY_ADDRESS);
+        int proxyPort = preferences.getInt(IrisPreferences.PROXY_PORT, 0);
+        log.debug("プロキシサーバ "+proxyAddress+":"+proxyPort);
+        
+        preferences.setValue(IrisPreferences.PROXY_ADDRESS, "hoge");
+        try{
+        	preferences.save();
+        }catch(BackingStoreException e){
+        	log.debug("保存失敗",e);
+        }
+        
+        stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>(){
+			@Override
+			public void handle(WindowEvent event) {
+				controller.saveWindowState();
+				log.debug("終了");
+			}
+        });
+        		
         // ステージの表示
         stage.show();
 	}

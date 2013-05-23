@@ -14,7 +14,7 @@
   <children>
     <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <center>
-        <SplitPane id="page-splitpane" dividerPositions="0.5016703786191536" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px">
+        <SplitPane id="page-splitpane" fx:id="leftSplitPane" dividerPositions="0.160913140311804" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-padding: 0px">
           <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
               <children>
@@ -36,7 +36,7 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
               <children>
-                <SplitPane id="page-splitpane" dividerPositions="0.558165548098434" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <SplitPane id="page-splitpane" fx:id="rightSplitPane" dividerPositions="0.5371845949535192" focusTraversable="true" prefHeight="398.0" prefWidth="479.0" scaleX="1.0" style="-fx-padding: 0px;&#10;-fx-background-color: null;&#10;&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <items>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="&#10;">
                       <children>
@@ -111,7 +111,9 @@
           <menus>
             <Menu mnemonicParsing="false" text="ファイル">
               <items>
-                <MenuItem mnemonicParsing="false" text="閉じる" />
+                <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="設定" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="終了" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="編集">

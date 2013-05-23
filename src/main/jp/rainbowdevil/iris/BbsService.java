@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.BbsConnector;
@@ -17,6 +19,7 @@ import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
 import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
 import jp.rainbowdevil.bbslibrary.repository.BbsRepository;
 import jp.rainbowdevil.bbslibrary.utils.IOUtils;
+import jp.rainbowdevil.iris.preferences.IrisPreferences;
 
 public class BbsService {
 	private static org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
@@ -35,12 +38,17 @@ public class BbsService {
 		bbs.setUrl("http://menu.2ch.net/bbsmenu.html");
 		bbsConnector = bbsManager.createBbsConnector(bbs);
 		bbsRepository = new BbsRepository();
-		
 		setProxy();
 	}
 	
 	private void setProxy(){
-			
+		IrisPreferences preferences = new IrisPreferences();
+		if (preferences.get(IrisPreferences.PROXY_ADDRESS, "").trim().length() != 0){
+			String address = preferences.get(IrisPreferences.PROXY_ADDRESS);
+			int port = preferences.getInt(IrisPreferences.PROXY_PORT, 8080);
+			Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress(address,port));
+			bbsConnector.setProxy(proxy);
+		}
 	}
 	
 	/**
@@ -52,6 +60,7 @@ public class BbsService {
 	 * @throws BbsPerseException
 	 */
 	public List<Board> downloadBoardList() throws IOException, BbsPerseException{
+		setProxy();
 		InputStream inputStream = bbsConnector.getBoardGroup();
 		byte[] bytes = IOUtils.toByteArray(inputStream);		
 		NichannelParser parser = new NichannelParser();
@@ -106,6 +115,7 @@ public class BbsService {
 	
 	public void openBoard(Board board){
 		try {
+			setProxy();
 			List<MessageThread> messageThreads = bbsConnector.getMessageThreadList(board);
 			controller.showThreadList(messageThreads);
 		} catch (IOException e) {
@@ -117,6 +127,7 @@ public class BbsService {
 	
 	public void openMessageThread(MessageThread messageThread){
 		try{
+			setProxy();
 			List<Message> messages = bbsConnector.getMessageList(messageThread, messageThread.getParentBoard());
 			controller.showMessageWebView(convertMessageListToHtml(messages));
 		} catch (IOException e){
