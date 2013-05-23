@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml" fx:controller="jp.rainbowdevil.iris.preferences.PreferencesController">
+  <children>
+    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <bottom>
+        <FlowPane alignment="CENTER_RIGHT" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="CENTER_RIGHT">
+          <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="-1.0" prefWidth="-1.0">
+              <children>
+                <Button mnemonicParsing="false" onAction="#okButtonPressed" text="OK" />
+                <Button mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
+                  <HBox.margin>
+                    <Insets left="10.0" fx:id="x1" />
+                  </HBox.margin>
+                </Button>
+              </children>
+            </HBox>
+          </children>
+          <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" />
+          </padding>
+        </FlowPane>
+      </bottom>
+      <center>
+        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+            <Tab text="一般">
+              <content>
+                <AnchorPane id="Content" disable="false" minHeight="0.0" minWidth="0.0" prefHeight="-1.0" prefWidth="-1.0">
+                  <children>
+                    <Label alignment="CENTER" text="まだ何もないよ！プロキシはネットワークを開いてね。" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="ネットワーク">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <children>
+                    <FlowPane prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <children>
+                        <HBox prefHeight="-1.0" prefWidth="-1.0">
+                          <children>
+                            <Label text="Proxy設定" />
+                            <Label text="アドレス" HBox.margin="$x1" />
+                            <TextField fx:id="proxyAddressTextField" prefWidth="200.0" />
+                            <Label text="ポート" />
+                            <TextField fx:id="proxyPortTextField" prefWidth="100.0" />
+                          </children>
+                        </HBox>
+                      </children>
+                      <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                      </padding>
+                    </FlowPane>
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+          </tabs>
+        </TabPane>
+      </center>
+    </BorderPane>
+  </children>
+</AnchorPane>
