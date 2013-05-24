@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.BackingStoreException;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -111,7 +110,11 @@ public class IrisController implements Initializable{
 		setupToolbar(messageListToolbar);
 		setupToolbar(threadListToolbar);
 		
-		menuBar.setUseSystemMenuBar(false);
+		if (IrisWindow.isMac()){
+			menuBar.setUseSystemMenuBar(true);
+		}else{
+			menuBar.setUseSystemMenuBar(false);
+		}
 	}
 	
 	private double mouseDragOffsetX = 0;
@@ -168,7 +171,8 @@ public class IrisController implements Initializable{
 	 * @param e
 	 */
 	public void exit(ActionEvent e) {
-		Platform.exit();
+		//Platform.exit();
+		stage.close();
 	}
 	
 	/**
@@ -247,7 +251,7 @@ public class IrisController implements Initializable{
 	 * ウインドウの状態を保存する。
 	 */
 	public void saveWindowState(){
-		//log.debug("ウインドウ高さ="+stage.getHeight()+" 幅="+stage.getWidth()+" 板幅="+leftSplitPane.getDividerPositions()[0]+" メッセージ幅="+rightSplitPane.getDividerPositions()[0]);
+		log.debug("ウインドウ高さ="+stage.getHeight()+" 幅="+stage.getWidth()+" 板幅="+leftSplitPane.getDividerPositions()[0]+" メッセージ幅="+rightSplitPane.getDividerPositions()[0]);
 		IrisPreferences preferences = new IrisPreferences();
 		preferences.setValue(IrisPreferences.WINDOW_HEIGHT, stage.getHeight());
 		preferences.setValue(IrisPreferences.WINDOW_WIDTH, stage.getWidth());
@@ -265,20 +269,18 @@ public class IrisController implements Initializable{
 	 */
 	public void loadWindowState(){
 		IrisPreferences preferences = new IrisPreferences();
-		stage.setHeight(preferences.getDouble(IrisPreferences.WINDOW_HEIGHT, 900f));
-		stage.setWidth(preferences.getDouble(IrisPreferences.WINDOW_WIDTH, 600f));
+		stage.setHeight(preferences.getDouble(IrisPreferences.WINDOW_HEIGHT, 600f));
+		stage.setWidth(preferences.getDouble(IrisPreferences.WINDOW_WIDTH, 900f));
 		double[] div1 = new double[1];
 		div1[0] = preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION1, 0.3f); 
 		leftSplitPane.setDividerPositions(div1);
 		double[] div2 = new double[1];
 		div2[0] = preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION2, 0.5f); 
 		rightSplitPane.setDividerPositions(div2);
-		/*
 		log.debug("ウインドウサイズ復元 width="+preferences.getDouble(IrisPreferences.WINDOW_WIDTH, 600f)+
 				" height="+preferences.getDouble(IrisPreferences.WINDOW_HEIGHT, 900f)+
 				" split1="+preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION1, 0.3f)+
 				" split2="+preferences.getDouble(IrisPreferences.WINDOW_DIVIDER_POSITION2, 0.5f));
-		*/
 	}
 
 	public Stage getStage() {

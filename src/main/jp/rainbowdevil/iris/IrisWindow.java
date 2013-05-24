@@ -23,12 +23,11 @@ public class IrisWindow extends Application{
         // ステージのタイトルを設定
         stage.setTitle("Iris");
         
-        String osName = System.getProperty("os.name");
-        if ( osName != null && osName.contains("Windows")){
-        	stage.initStyle(StageStyle.DECORATED);
-        }else{
+        if (isMac()){
         	// ウインドウタイトルを非表示
         	stage.initStyle(StageStyle.UNDECORATED);
+        }else{
+        	stage.initStyle(StageStyle.DECORATED);
         }
         
         //Parent root = FXMLLoader.load(getClass().getResource("/MainWindow.fxml"));
@@ -72,6 +71,12 @@ public class IrisWindow extends Application{
 				log.debug("終了");
 			}
         });
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        	@Override
+        	public void handle(WindowEvent event) {
+        		log.debug("close");
+        	}
+		});
         		
         // ステージの表示
         stage.show();
@@ -79,6 +84,14 @@ public class IrisWindow extends Application{
 	
 	public static void main(String[] args){
 		launch(args);
+	}
+	
+	public static boolean isMac(){
+		String osName = System.getProperty("os.name");
+	    if ( osName != null && osName.contains("Mac")){
+	        return true;
+	    }
+	    return false;
 	}
 
 }
