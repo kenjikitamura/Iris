@@ -224,6 +224,14 @@ public class IrisController implements Initializable{
 		}
 	}
 	
+	/**
+	 * メッセージ一覧リロード
+	 * @param e
+	 */
+	public void onMessageListReload(ActionEvent e){
+		service.reloadMessageThread();
+	}
+	
 	//-------------------------------------------------------
 	// メニュー
 	

@@ -89,6 +89,15 @@
                                     </ImageView>
                                   </graphic>
                                 </Button>
+                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onMessageListReload" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
+                                  <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                        <Image url="@jp/rainbowdevil/iris/images/reload.png" />
+                                      </image>
+                                    </ImageView>
+                                  </graphic>
+                                </Button>
                                 <Label fx:id="messageThreadTitleLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" />
                               </items>
                             </ToolBar>

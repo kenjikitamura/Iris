@@ -31,6 +31,9 @@ public class BbsService {
 	private IrisController controller;
 	private BbsRepository bbsRepository;
 	
+	/** 現在表示中のスレッド */
+	private MessageThread currentMessageThread;
+	
 	public void init(){
 		bbsManager = new BbsManager();
 		bbs = new Bbs();
@@ -64,7 +67,7 @@ public class BbsService {
 		InputStream inputStream = bbsConnector.getBoardGroup();
 		byte[] bytes = IOUtils.toByteArray(inputStream);		
 		NichannelParser parser = new NichannelParser();
-		List<Board> boardGroups = parser.parseBbsMenu(new ByteArrayInputStream(bytes));
+		List<Board> boardGroups = parser.parseBbsMenu(new ByteArrayInputStream(bytes), bbs);
 		
 		// パースに成功したら保存
 		bbsRepository.writeBoardList(bbs, bytes);
@@ -79,9 +82,9 @@ public class BbsService {
 	/**
 	 * 板一覧を更新し、表示する。
 	 */
-	public void updateBoardList(){
+	public void updateBoardList(boolean forceUpdate){
 		List<Board> localBoardList = readBoardListFromRepository();
-		if (localBoardList != null){
+		if (localBoardList != null && !forceUpdate){
 			log.debug("板一覧のキャッシュを使用");
 			boardGroups = localBoardList;
 			controller.showBoardList(localBoardList);
@@ -98,12 +101,15 @@ public class BbsService {
 			}
 		}
 	}
+	public void updateBoardList(){
+		updateBoardList(false);
+	}
 	
 	public List<Board> readBoardListFromRepository(){
 		try {
 			InputStream inputStream = bbsRepository.loadBoardList(bbs);
 			NichannelParser parser = new NichannelParser();
-			boardGroups = parser.parseBbsMenu(inputStream);
+			boardGroups = parser.parseBbsMenu(inputStream, bbs);
 			return boardGroups;
 		} catch (IOException e){
 			log.debug("保存した板一覧はなかった。");
@@ -128,13 +134,30 @@ public class BbsService {
 	public void openMessageThread(MessageThread messageThread){
 		try{
 			setProxy();
-			List<Message> messages = bbsConnector.getMessageList(messageThread, messageThread.getParentBoard());
+			InputStream inputStream = bbsConnector.getMessageList(messageThread, messageThread.getParentBoard());
+			byte[] bytes = IOUtils.toByteArray(inputStream);
+			
+			NichannelParser parser = new NichannelParser();
+			List<Message> messages = parser.parseMessageList(new ByteArrayInputStream(bytes));
+			for(Message message:messages){
+				message.setParentMessageThread(messageThread);
+			}
 			controller.showMessageWebView(convertMessageListToHtml(messages));
+			currentMessageThread = messageThread;
+
+			bbsRepository.writeMessageThread(messageThread, bytes);
 		} catch (IOException e){
 			controller.showErrorMessage("メッセージ一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
 		} catch (BbsPerseException e) {
 			controller.showErrorMessage("メッセージ一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
 		}
+	}
+	
+	/**
+	 * 現在表示中のスレッドを更新する。
+	 */
+	public void reloadMessageThread(){
+		openMessageThread(currentMessageThread);
 	}
 	
 	private String convertMessageListToHtml(List<Message> messages){
