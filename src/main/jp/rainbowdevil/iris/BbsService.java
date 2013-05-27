@@ -122,7 +122,9 @@ public class BbsService {
 	public void openBoard(Board board){
 		try {
 			setProxy();
-			List<MessageThread> messageThreads = bbsConnector.getMessageThreadList(board);
+			InputStream inputStream = bbsConnector.getMessageThreadList(board);
+			NichannelParser parser = new NichannelParser();
+			List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
 			controller.showThreadList(messageThreads);
 		} catch (IOException e) {
 			controller.showErrorMessage("スレッド一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
