@@ -56,7 +56,9 @@ public class IrisWindow extends Application{
         AnchorPane.setLeftAnchor(root, (double) 0);
         AnchorPane.setRightAnchor(root, (double) 0);
         
-        root2.getChildren().add(windowResizeButton);
+        if (IrisWindow.isMac()){
+        	root2.getChildren().add(windowResizeButton);
+        }
         Scene scene = new Scene(root2);
         
         

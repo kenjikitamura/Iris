@@ -62,6 +62,9 @@ public class IrisController implements Initializable{
 	@FXML private MenuBar menuBar;
 	@FXML private SplitPane leftSplitPane;
 	@FXML private SplitPane rightSplitPane;
+	@FXML private Button closeButton;
+	@FXML private Button minimizedButton;
+	@FXML private Button maximizedButton;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -111,9 +114,12 @@ public class IrisController implements Initializable{
 		setupToolbar(threadListToolbar);
 		
 		if (IrisWindow.isMac()){
-			menuBar.setUseSystemMenuBar(true);
+			menuBar.setUseSystemMenuBar(true);			
 		}else{
 			menuBar.setUseSystemMenuBar(false);
+			closeButton.setVisible(false);
+			minimizedButton.setVisible(false);
+			maximizedButton.setVisible(false);
 		}
 	}
 	
