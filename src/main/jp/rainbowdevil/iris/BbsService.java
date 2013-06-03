@@ -2,6 +2,7 @@ package jp.rainbowdevil.iris;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +31,9 @@ public class BbsService {
 	private BbsConnector bbsConnector;
 	private IrisController controller;
 	private BbsRepository bbsRepository;
+	
+	/** 現在表示中の板 */
+	private Board currentBoard;
 	
 	/** 現在表示中のスレッド */
 	private MessageThread currentMessageThread;
@@ -105,6 +109,10 @@ public class BbsService {
 		updateBoardList(false);
 	}
 	
+	/**
+	 * 板一覧リストをキャッシュから読み込む
+	 * @return
+	 */
 	public List<Board> readBoardListFromRepository(){
 		try {
 			InputStream inputStream = bbsRepository.loadBoardList(bbs);
@@ -120,16 +128,64 @@ public class BbsService {
 	}
 	
 	public void openBoard(Board board){
+		openBoard(board,false);
+	}
+	
+	public void openBoard(Board board, boolean forceUpdate){
+		log.debug("板を開きスレッド一覧を取得する url="+board.getUrl());
+		List<MessageThread> localMessageThreads = readMessageThreadListFromRepository(board); 
+		if (localMessageThreads != null && !forceUpdate){
+			log.debug("スレッド一覧のキャッシュを使用");
+			controller.showThreadList(localMessageThreads);
+		}else{
+			log.debug("サーバからスレッド一覧を取得");
+			try {
+				setProxy();
+				InputStream inputStream = bbsConnector.getMessageThreadList(board);
+				byte[] bytes = IOUtils.toByteArray(inputStream);
+				NichannelParser parser = new NichannelParser();
+				List<MessageThread> messageThreads = parser.parseMessageThreadList(new ByteArrayInputStream(bytes), board);
+				controller.showThreadList(messageThreads);
+				
+				// 読み込みに成功したら保存
+				log.debug(board.getTitle()+"をキャッシュに保存");
+				bbsRepository.writeMessageThreadList(board, bytes);
+				
+				currentBoard = board;
+				
+			} catch (IOException e) {
+				controller.showErrorMessage("スレッド一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
+			} catch (BbsPerseException e) {
+				controller.showErrorMessage("スレッド一覧のパースに失敗。"+e.getClass().getName()+":"+e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * スレッド一覧をキャッシュから読み込む
+	 * 
+	 * キャッシュに存在しない場合はnullを返す。
+	 * 
+	 * @param board
+	 * @return
+	 */
+	public List<MessageThread> readMessageThreadListFromRepository(Board board){
 		try {
-			setProxy();
-			InputStream inputStream = bbsConnector.getMessageThreadList(board);
-			NichannelParser parser = new NichannelParser();
-			List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
-			controller.showThreadList(messageThreads);
+			InputStream inputStream = bbsRepository.loadMessageThreadList(board);
+			if (inputStream == null){
+				return null;
+			}else{
+				NichannelParser parser = new NichannelParser();
+				return parser.parseMessageThreadList(inputStream, board);
+			}
+		} catch (FileNotFoundException e) {
+			return null;
 		} catch (IOException e) {
-			controller.showErrorMessage("スレッド一覧の取得に失敗。"+e.getClass().getName()+":"+e.getMessage());
+			log.debug("スレッド一覧のキャッシュ読み込み中に例外発生 ",e);
+			return null;
 		} catch (BbsPerseException e) {
-			controller.showErrorMessage("スレッド一覧のパースに失敗。"+e.getClass().getName()+":"+e.getMessage());
+			log.debug("スレッド一覧のキャッシュ読み込み中に例外発生 ",e);
+			return null;
 		}
 	}
 	
@@ -140,7 +196,7 @@ public class BbsService {
 			byte[] bytes = IOUtils.toByteArray(inputStream);
 			
 			NichannelParser parser = new NichannelParser();
-			List<Message> messages = parser.parseMessageList(new ByteArrayInputStream(bytes));
+			List<Message> messages = parser.parseMessageList(new ByteArrayInputStream(bytes), messageThread);
 			for(Message message:messages){
 				message.setParentMessageThread(messageThread);
 			}
@@ -160,6 +216,15 @@ public class BbsService {
 	 */
 	public void reloadMessageThread(){
 		openMessageThread(currentMessageThread);
+	}
+	
+	/**
+	 * 現在表示中の板を更新する
+	 */
+	public void reloadBoard(){
+		if (currentBoard != null){
+			openBoard(currentBoard, true);
+		}
 	}
 	
 	private String convertMessageListToHtml(List<Message> messages){

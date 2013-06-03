@@ -47,7 +47,7 @@
                           <top>
                             <ToolBar id="page-toolbar" fx:id="threadListToolbar" maxHeight="31.0" minHeight="31.0" prefHeight="31.0" prefWidth="303.0">
                               <items>
-                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
+                                <Button maxHeight="30.0" maxWidth="-1.0" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onMessageThreadListReload" prefHeight="30.0" prefWidth="25.0" style="&#10;    -fx-background-radius: 0;" text="">
                                   <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                       <image>
