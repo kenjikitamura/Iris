@@ -128,7 +128,12 @@ public class BbsService {
 				}
 			}
 		}
+		String messageThreadFilename = preferences.get(IrisPreferences.LAST_SELECTED_MESSAGE_THREAD_FILENAME);
+		MessageThread messageThread = new MessageThread();
+		messageThread.setFilename(messageThreadFilename);
+		controller.setSelection(messageThread);
 	}
+	
 	
 	
 	/**

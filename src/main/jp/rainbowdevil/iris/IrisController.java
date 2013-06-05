@@ -160,14 +160,32 @@ public class IrisController implements Initializable{
 		}
 	}
 	
+	/**
+	 * TreeViewで板を選択する。
+	 * 
+	 * 仮実装で二階層まで対応
+	 * @param board
+	 */
 	public void setSelection(Board board){
 		TreeItem<Board> root = boardTreeView.getRoot();
 		for(TreeItem<Board> boardItem1:root.getChildren()){
 			for(TreeItem<Board> boardItem2:boardItem1.getChildren()){
-				log.debug("id="+boardItem2.getValue().getId());
 				if (boardItem2.getValue().getId().equals(board.getId())){
 					boardTreeView.getSelectionModel().select(boardItem2);			
 				}
+			}
+		}
+	}
+	
+	/**
+	 * ListViewでスレッドを選択する。
+	 * 
+	 * @param messageThread
+	 */
+	public void setSelection(MessageThread messageThread){
+		for(MessageThread messageThread1:messageThreadListView.getItems()){
+			if (messageThread1.getFilename().equals(messageThread.getFilename())){
+				messageThreadListView.getSelectionModel().select(messageThread1);
 			}
 		}
 	}
