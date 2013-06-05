@@ -110,6 +110,28 @@ public class BbsService {
 	}
 	
 	/**
+	 * 最後に開いていたアイテムを表示する。
+	 */
+	public void openLastSelectedItem(){
+		IrisPreferences preferences = new IrisPreferences();
+		String boardId = preferences.get(IrisPreferences.LAST_SELECTED_BOARD_ID);
+		log.debug("最後に開いていた板 ID="+boardId);
+		if (boardId != null){
+			for(Board board:boardGroups){
+				if (board.hasChildren()){
+					for(Board board2:board.getChildren()){
+						if (board2.getId().equals(boardId)){
+							log.debug("最後に開いていた板を開く id="+boardId+" board="+board2);
+							controller.setSelection(board2);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	/**
 	 * 板一覧リストをキャッシュから読み込む
 	 * @return
 	 */
@@ -236,7 +258,7 @@ public class BbsService {
 			sb.append("<font color='blue'>"+no+"</font>");
 			
 			// Name
-			sb.append(" : <font color='green'>"+message.getUserName()+"</font> ");
+			sb.append(" : <font color='green'>"+message.getUserName()+"</b></font> ");
 			
 			// 投稿日
 			sb.append(" : "+message.getSubmittedDateString());
@@ -280,5 +302,21 @@ public class BbsService {
 
 	public void setController(IrisController controller) {
 		this.controller = controller;
+	}
+
+	public Board getCurrentBoard() {
+		return currentBoard;
+	}
+
+	public void setCurrentBoard(Board currentBoard) {
+		this.currentBoard = currentBoard;
+	}
+
+	public MessageThread getCurrentMessageThread() {
+		return currentMessageThread;
+	}
+
+	public void setCurrentMessageThread(MessageThread currentMessageThread) {
+		this.currentMessageThread = currentMessageThread;
 	}
 }

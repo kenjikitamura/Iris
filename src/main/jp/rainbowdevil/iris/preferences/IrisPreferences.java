@@ -15,6 +15,12 @@ public class IrisPreferences {
 	public static final String WINDOW_DIVIDER_POSITION1 = "window.dividerposition1";
 	public static final String WINDOW_DIVIDER_POSITION2 = "window.dividerposition2";
 	
+	/** 最後に選択していた板ID */
+	public static final String LAST_SELECTED_BOARD_ID = "last_selected.board_id";
+	
+	/** 最後に選択していたスレッドのファイル名 */
+	public static final String LAST_SELECTED_MESSAGE_THREAD_FILENAME = "last_selected.messagethread_filename";
+	
 	public IrisPreferences(){
 		prefs = Preferences.userNodeForPackage(IrisWindow.class);
 	}

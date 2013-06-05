@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 public class IrisWindow extends Application{
 	
 	private static Logger log = LogManager.getLogger(IrisWindow.class);
-	
+	private IrisController controller;
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -33,7 +33,7 @@ public class IrisWindow extends Application{
         //Parent root = FXMLLoader.load(getClass().getResource("/MainWindow.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
         final AnchorPane root = (AnchorPane) loader.load();
-        final IrisController controller = (IrisController)loader.getController();
+        controller = (IrisController)loader.getController();
         controller.setStage(stage);
         controller.loadWindowState();
         
@@ -69,8 +69,8 @@ public class IrisWindow extends Application{
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>(){
 			@Override
 			public void handle(WindowEvent event) {
-				controller.saveWindowState();
-				log.debug("終了");
+				close();
+				
 			}
         });
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -82,6 +82,14 @@ public class IrisWindow extends Application{
         		
         // ステージの表示
         stage.show();
+	}
+	
+	/**
+	 * 終了処理
+	 */
+	private void close(){
+		controller.saveWindowState();
+		log.debug("終了");
 	}
 	
 	public static void main(String[] args){

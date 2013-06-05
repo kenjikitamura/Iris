@@ -72,7 +72,6 @@ public class IrisController implements Initializable{
 		service = new BbsService();
 		service.setController(this);
 		service.init();
-		
 		service.updateBoardList();
 		boardTreeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		boardTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -121,6 +120,8 @@ public class IrisController implements Initializable{
 			minimizedButton.setVisible(false);
 			maximizedButton.setVisible(false);
 		}
+		
+		service.openLastSelectedItem();
 	}
 	
 	private double mouseDragOffsetX = 0;
@@ -156,6 +157,18 @@ public class IrisController implements Initializable{
 		rootNode.setExpanded(true);
 		for(Board board:boards){
 			setupTreeItem(rootNode, board);
+		}
+	}
+	
+	public void setSelection(Board board){
+		TreeItem<Board> root = boardTreeView.getRoot();
+		for(TreeItem<Board> boardItem1:root.getChildren()){
+			for(TreeItem<Board> boardItem2:boardItem1.getChildren()){
+				log.debug("id="+boardItem2.getValue().getId());
+				if (boardItem2.getValue().getId().equals(board.getId())){
+					boardTreeView.getSelectionModel().select(boardItem2);			
+				}
+			}
 		}
 	}
 	
@@ -279,6 +292,13 @@ public class IrisController implements Initializable{
 		preferences.setValue(IrisPreferences.WINDOW_WIDTH, stage.getWidth());
 		preferences.setValue(IrisPreferences.WINDOW_DIVIDER_POSITION1, leftSplitPane.getDividerPositions()[0]);
 		preferences.setValue(IrisPreferences.WINDOW_DIVIDER_POSITION2, rightSplitPane.getDividerPositions()[0]);
+		if (service.getCurrentBoard() != null){
+			log.debug("最後に開いていた板を保存 id="+service.getCurrentBoard().getId());
+			preferences.setValue(IrisPreferences.LAST_SELECTED_BOARD_ID, service.getCurrentBoard().getId());
+		}
+		if (service.getCurrentMessageThread() != null){
+			preferences.setValue(IrisPreferences.LAST_SELECTED_MESSAGE_THREAD_FILENAME, service.getCurrentMessageThread().getFilename());
+		}
 		try {
 			preferences.save();
 		} catch (BackingStoreException e) {
