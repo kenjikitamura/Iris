@@ -43,6 +43,7 @@ public class IrisController implements Initializable{
 	private BbsService service;
 	private TreeItem<Board> rootNode = new TreeItem<Board>(new Board());
 	
+	
 	/** 最大化用 */
     private Rectangle2D backupWindowBounds = null;
     private boolean maximized = false;
@@ -155,10 +156,40 @@ public class IrisController implements Initializable{
 	 */
 	public void showBoardList(List<Board> boards){
 		boardTreeView.setRoot(rootNode);
-		rootNode.getValue().setTitle("2ch");
+		boardTreeView.setShowRoot(false);
+		rootNode.getValue().setTitle("root");
+		rootNode.getValue().setId("root_");
 		rootNode.setExpanded(true);
+		
+		// 履歴
+		TreeItem<Board> userTree = new TreeItem<Board>(new Board());
+		userTree.getValue().setTitle("ユーザ");
+		userTree.getValue().setId("user_");
+		userTree.setExpanded(true);
+		rootNode.getChildren().add(userTree);
+		
+		TreeItem<Board> history = new TreeItem<Board>(new Board());
+		history.getValue().setTitle("履歴");
+		history.getValue().setId("history_");
+		history.setExpanded(true);
+		userTree.getChildren().add(history);
+		
+		TreeItem<Board> favorite = new TreeItem<Board>(new Board());
+		favorite.getValue().setTitle("お気に入り");
+		favorite.getValue().setId("favorite_");
+		favorite.setExpanded(true);
+		userTree.getChildren().add(favorite);
+		
+		TreeItem<Board> nichanBoard = new TreeItem<Board>(new Board());
+		nichanBoard.getValue().setTitle("2ch");
+		nichanBoard.getValue().setId("2ch_");
+		nichanBoard.setExpanded(true);
+		rootNode.getChildren().add(nichanBoard);
+		
+		
+		
 		for(Board board:boards){
-			setupTreeItem(rootNode, board);
+			setupTreeItem(nichanBoard, board);
 		}
 	}
 	
@@ -172,7 +203,7 @@ public class IrisController implements Initializable{
 		TreeItem<Board> root = boardTreeView.getRoot();
 		for(TreeItem<Board> boardItem1:root.getChildren()){
 			for(TreeItem<Board> boardItem2:boardItem1.getChildren()){
-				if (boardItem2.getValue().getId().equals(board.getId())){
+				if (boardItem2.getValue() != null && boardItem2.getValue().getId() != null && boardItem2.getValue().getId().equals(board.getId())){
 					boardTreeView.getSelectionModel().select(boardItem2);			
 				}
 			}
@@ -210,7 +241,6 @@ public class IrisController implements Initializable{
 	 * @param e
 	 */
 	public void exit(ActionEvent e) {
-		//Platform.exit();
 		stage.close();
 	}
 	
