@@ -123,15 +123,19 @@ public class BbsService {
 						if (board2.getId().equals(boardId)){
 							log.debug("最後に開いていた板を開く id="+boardId+" board="+board2);
 							controller.setSelection(board2);
+							currentBoard = board2;
 						}
 					}
 				}
 			}
 		}
 		String messageThreadFilename = preferences.get(IrisPreferences.LAST_SELECTED_MESSAGE_THREAD_FILENAME);
-		MessageThread messageThread = new MessageThread();
-		messageThread.setFilename(messageThreadFilename);
-		controller.setSelection(messageThread);
+		if (messageThreadFilename != null){
+			MessageThread messageThread = new MessageThread();
+			messageThread.setFilename(messageThreadFilename);
+			controller.setSelection(messageThread);
+			currentMessageThread = messageThread;
+		}
 	}
 	
 	
@@ -249,6 +253,7 @@ public class BbsService {
 	 * 現在表示中の板を更新する
 	 */
 	public void reloadBoard(){
+		log.debug("表示中の板をリロード 板="+currentBoard);
 		if (currentBoard != null){
 			openBoard(currentBoard, true);
 		}

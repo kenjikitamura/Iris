@@ -136,9 +136,11 @@ public class IrisController implements Initializable{
         });
         toolBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent event) {
-            	Stage stage = (Stage) topPane.getScene().getWindow();
-                stage.setX(event.getScreenX()-mouseDragOffsetX);
-                stage.setY(event.getScreenY()-mouseDragOffsetY);
+            	if (IrisWindow.isMac()){
+            		Stage stage = (Stage) topPane.getScene().getWindow();
+            		stage.setX(event.getScreenX()-mouseDragOffsetX);
+            		stage.setY(event.getScreenY()-mouseDragOffsetY);
+            	}
             }
         });
 	}
